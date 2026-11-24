@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نتيجة الطلاب</title>
+<style>
+body{font-family:Arial;background:#f0f2f5;margin:0;padding:15px}
+.card{background:#fff;max-width:500px;margin:auto;padding:20px;border-radius:15px;box-shadow:0 2px 10px #0002;text-align:center}
+h1{color:#1a73e8}
+input{width:90%;padding:12px;margin:8px 0;border:1px solid #ccc;border-radius:8px;font-size:16px;text-align:center}
+button{background:#1a73e8;color:#fff;border:0;padding:12px 20px;border-radius:8px;font-size:16px;width:95%;margin-top:5px}
+.result{margin-top:15px;text-align:right;background:#e8f0fe;padding:15px;border-radius:10px;display:none}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+td,th{border:1px solid #ddd;padding:8px;text-align:center}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>🎓 نتيجة الطلاب</h1>
+<p>اكتب رقم الجلوس أو اسم الطالب</p>
+<input id="search" placeholder="مثال: 12345 أو أحمد">
+<button onclick="searchStudent()">عرض النتيجة 🔍</button>
+<div id="result" class="result"></div>
+<hr>
+<h3>إضافة طالب جديد (للمدرس)</h3>
+<input id="name" placeholder="اسم الطالب">
+<input id="seat" placeholder="رقم الجلوس">
+<input id="grade" placeholder="الدرجة - مثال: 95%">
+<button onclick="addStudent()" style="background:#34a853">إضافة الطالب ✅</button>
+<p id="msg" style="color:green"></p>
+</div>
+<script>
+let students = JSON.parse(localStorage.getItem('students')||'[]');
+function addStudent(){
+ let n=document.getElementById('name').value.trim();
+ let s=document.getElementById('seat').value.trim();
+ let g=document.getElementById('grade').value.trim();
+ if(!n||!s||!g){alert('اكتب كل البيانات');return;}
+ students.push({name:n,seat:s,grade:g});
+ localStorage.setItem('students',JSON.stringify(students));
+ document.getElementById('msg').innerText='تمت إضافة '+n+' بنجاح';
+ document.getElementById('name').value='';document.getElementById('seat').value='';document.getElementById('grade').value='';
+}
+function searchStudent(){
+ let q=document.getElementById('search').value.trim();
+ let f=students.find(x=>x.seat==q || x.name==q);
+ let r=document.getElementById('result');
+ r.style.display='block';
+ if(f){r.innerHTML=`<b>الاسم:</b> ${f.name}<br><b>رقم الجلوس:</b> ${f.seat}<br><b>النتيجة:</b> ${f.grade} 🎉`;}
+ else{r.innerHTML='الطالب مش موجود، اتأكد من الاسم أو رقم الجلوس';}
+}
+</script>
+</body>
+</html>
